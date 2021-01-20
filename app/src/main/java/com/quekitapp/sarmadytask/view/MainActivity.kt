@@ -80,11 +80,10 @@ class MainActivity : AppCompatActivity() {
             val movieList: MutableList<Photo> = it.photos.photo
             var position = 5
             for (i in 0..movieList.size) {
-            if (i==position-1){
+            if (i==position){
                 val photo=Photo("0","","","","","","","","")
                  movieList.add(position,photo)
-                position=position+5
-            }
+                position=position+6            }
             }
 
             if (currentPage == 1) {

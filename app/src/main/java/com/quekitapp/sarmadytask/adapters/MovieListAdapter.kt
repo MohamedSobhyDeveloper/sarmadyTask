@@ -61,21 +61,23 @@ class MovieListAdapter(private val context: Context,val movieList: MutableList<P
 
                 Glide.with(context).load(photoUrl).into(itemBinding.moviePhoto)
                 itemBinding.moviePhoto.setOnClickListener {
-                    val urls = ArrayList<String>()
-                    urls.add(photoUrl)
-                    StfalconImageViewer.Builder(
-                        context,
-                        urls
-                    ) { imageView: ImageView?, image: String? ->
-                        val with = Glide.with(context)
-                        val requestBuilder: RequestBuilder<Drawable>
-                        requestBuilder = with.load(image)
+                    if (!moviephoto.farm.equals("0")) {
+                        val urls = ArrayList<String>()
+                        urls.add(photoUrl)
+                        StfalconImageViewer.Builder(
+                            context,
+                            urls
+                        ) { imageView: ImageView?, image: String? ->
+                            val with = Glide.with(context)
+                            val requestBuilder: RequestBuilder<Drawable>
+                            requestBuilder = with.load(image)
 
-                        requestBuilder.into(imageView!!)
-                    }.withStartPosition(0)
-                        .withTransitionFrom(itemBinding.moviePhoto)
-                        .withImageChangeListener { x: Int -> println(x) }
-                        .show()
+                            requestBuilder.into(imageView!!)
+                        }.withStartPosition(0)
+                            .withTransitionFrom(itemBinding.moviePhoto)
+                            .withImageChangeListener { x: Int -> println(x) }
+                            .show()
+                    }
                 }
 
             }
