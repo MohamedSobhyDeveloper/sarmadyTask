@@ -54,7 +54,16 @@ class MainActivity : AppCompatActivity() {
                     if (currentPage <= totalPage && isLoading) {
                         isLoading = !isLoading
                         currentPage++
-                        getMoviePhoto(binding)
+                        val meMap = LinkedHashMap<String, String?>()
+                        meMap["method"] ="flickr.photos.search"
+                        meMap["format"] ="json"
+                        meMap["nojsoncallback"] ="50"
+                        meMap["text"] ="a"
+                        meMap["page"] = currentPage.toString()
+                        meMap["per_page"] ="20"
+                        meMap["api_key"] ="d17378e37e555ebef55ab86c4180e8dc"
+
+                        movieViewModel!!.getMoviePhoto(this@MainActivity, meMap)
                     }
                 }
             }
@@ -72,18 +81,18 @@ class MainActivity : AppCompatActivity() {
         meMap["per_page"] ="20"
         meMap["api_key"] ="d17378e37e555ebef55ab86c4180e8dc"
 
-
         movieViewModel!!.getMoviePhoto(this, meMap)
         movieViewModel!!.movieResponseLiveData.observe(this, {
-            isLoading = true
+            val size=it.photos.photo.size
             totalPage=it.photos.pages
             val movieList: MutableList<Photo> = it.photos.photo
             var position = 5
-            for (i in 0..movieList.size) {
+            for (i in 0..size) {
             if (i==position){
                 val photo=Photo("0","","","","","","","","")
-                 movieList.add(position,photo)
-                position=position+6            }
+                 movieList.add(i, photo)
+                 position=position+6
+            }
             }
 
             if (currentPage == 1) {
@@ -93,6 +102,8 @@ class MainActivity : AppCompatActivity() {
             } else {
                 adapter?.addList(movieList)
             }
+
+            isLoading = true
 
         })
 
