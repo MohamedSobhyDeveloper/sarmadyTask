@@ -50,6 +50,29 @@ class MovieListAdapter(private val context: Context,val movieList: MutableList<P
         @SuppressLint("UseCompatLoadingForDrawables")
         fun bind(context: Context, moviephoto: Photo) {
 
+            itemBinding.moviePhoto.setOnClickListener {
+                if (!moviephoto.farm.equals("0")) {
+                    val photoUrl =
+                        "http://farm" + moviephoto.farm + ".static.flickr.com/" + moviephoto.server + "/" + moviephoto.id + "_" + moviephoto.secret + ".jpg"
+
+                    val urls = ArrayList<String>()
+                    urls.add(photoUrl)
+                    StfalconImageViewer.Builder(
+                        context,
+                        urls
+                    ) { imageView: ImageView?, image: String? ->
+                        val with = Glide.with(context)
+                        val requestBuilder: RequestBuilder<Drawable>
+                        requestBuilder = with.load(image)
+
+                        requestBuilder.into(imageView!!)
+                    }.withStartPosition(0)
+                        .withTransitionFrom(itemBinding.moviePhoto)
+                        .withImageChangeListener { x: Int -> println(x) }
+                        .show()
+                }
+            }
+
 
             if (moviephoto.farm.equals("0")) {
                 Glide.with(context).load(R.drawable.ad_banner).into(itemBinding.moviePhoto)
@@ -60,25 +83,6 @@ class MovieListAdapter(private val context: Context,val movieList: MutableList<P
                     "http://farm" + moviephoto.farm + ".static.flickr.com/" + moviephoto.server + "/" + moviephoto.id + "_" + moviephoto.secret + ".jpg"
 
                 Glide.with(context).load(photoUrl).into(itemBinding.moviePhoto)
-                itemBinding.moviePhoto.setOnClickListener {
-                    if (!moviephoto.farm.equals("0")) {
-                        val urls = ArrayList<String>()
-                        urls.add(photoUrl)
-                        StfalconImageViewer.Builder(
-                            context,
-                            urls
-                        ) { imageView: ImageView?, image: String? ->
-                            val with = Glide.with(context)
-                            val requestBuilder: RequestBuilder<Drawable>
-                            requestBuilder = with.load(image)
-
-                            requestBuilder.into(imageView!!)
-                        }.withStartPosition(0)
-                            .withTransitionFrom(itemBinding.moviePhoto)
-                            .withImageChangeListener { x: Int -> println(x) }
-                            .show()
-                    }
-                }
 
             }
         }
